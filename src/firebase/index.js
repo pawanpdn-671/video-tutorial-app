@@ -32,10 +32,15 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function getChapters() {
-   const chapterCol = collection(db, 'chapter');
-   const chapterSnapshot = await getDocs(chapterCol);
-   const chapterList = chapterSnapshot.docs.map(chap => chap.data());
-   return chapterList;
+   try {
+      const chapterCol = collection(db, 'chapter');
+      const chapterSnapshot = await getDocs(chapterCol);
+      const chapterList = chapterSnapshot.docs.map(chap => chap.data());
+      return { status: 200, chapterList };
+   } catch (err) {
+      console.log(err)
+      return { status: 404, error: err }
+   }
 }
 
 export { getChapters };

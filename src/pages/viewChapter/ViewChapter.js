@@ -5,14 +5,17 @@ import { getChapters } from '../../firebase';
 
 
 const ViewChapter = () => {
-   const [chapters, setChapters] = useState(null);
+   const [chapters, setChapters] = useState([]);
    const [selectedLesson, setSelectedLesson] = useState(null);
 
 
    const getAllChapters = async () => {
       const response = await getChapters();
-      setChapters(response);
-      setSelectedLesson(response[0].lesson[0]);
+      console.log(response)
+      if (response.status === 200) {
+         setChapters(response.chapterList);
+         setSelectedLesson(response.chapterList[0].lesson[0]);
+      }
    }
 
    useEffect(() => {
@@ -25,7 +28,7 @@ const ViewChapter = () => {
             <h3 className="chapters-container-heading">Course Content</h3>
 
             {
-               chapters === null ? <div className='loading-spinner1'></div> : <Chapter chapters={chapters} setSelectedLesson={setSelectedLesson} />
+               chapters.length <= 0 ? <div className='loading-spinner1'></div> : <Chapter chapters={chapters} setSelectedLesson={setSelectedLesson} />
             }
          </div>
 
